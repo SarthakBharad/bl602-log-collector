@@ -327,12 +327,9 @@ For production:
 
 # 🚀 Future Improvements
 
-- WebSocket streaming
 - Log export (CSV/JSON)
 - Authentication
-- Grafana integration
 - Cloud deployment
-- Log rotation
 
 ---
 
