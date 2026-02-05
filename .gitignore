@@ -98,12 +98,6 @@ pip-delete-this-directory.txt
 .coverage
 htmlcov/
 
-# Certificates (Keep sample certs in repo for reference, but exclude real ones in production)
-# Uncomment these lines if using real certificates in production:
-# *.key
-# *.pem
-# private.*
-
 # Private keys - NEVER commit these
 *.key
 *.pem
