@@ -476,8 +476,23 @@ For bugs, feature requests, or questions:
 - Include device logs when reporting bugs
 - Specify Python version and OS
 
+## Contributors
+
+This project was developed by:
+
+- **Sarthak Bharad** - Project Lead
+- **Gopal Awasthi** - Backend Development
+- **Deepak Rajadurai** - Editor
+- **Vishant Bimbra** - Backend Development
+- **Amit Pal Singh** - Frontend & Web Dashboard
+
 ## Acknowledgments
 
+### Course & Mentorship
+- **Prof. Ralf Colmar Staudemeyer, PhD** - Course Professor
+- **Tobias Tefke** - Course Tutor
+
+### Technologies & Libraries
 - **PineCone BL602**: Excellent low-cost IoT device with WiFi
 - **Mosquitto**: Reliable MQTT broker
 - **Paho Python Client**: MQTT library
