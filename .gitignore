@@ -1,0 +1,106 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+virtualenv/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.sublime-project
+.sublime-workspace
+
+# Runtime Data Files (Local Development - Exclude in Production)
+# These are generated during development and should not be committed
+device_logs.db
+*.db-journal
+*.log
+
+# Config files with sensitive data
+*.conf
+!test_config.conf
+
+# OS-specific
+.DS_Store
+Thumbs.db
+*.tmp
+
+# Node modules (if any frontend build tools are used)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build artifacts (for C++ device code)
+*.o
+*.a
+*.out
+*.elf
+build/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+
+# Device firmware binaries
+*.bin
+*.hex
+*.firmware
+
+# Backup and temporary files
+*.bak
+*.backup
+*~
+*.swp
+*.swo
+.#*
+*.orig
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Python environment files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Test and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Certificates (Keep sample certs in repo for reference, but exclude real ones in production)
+# Uncomment these lines if using real certificates in production:
+# *.key
+# *.pem
+# private.*
+
