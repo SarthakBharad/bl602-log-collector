@@ -104,3 +104,10 @@ htmlcov/
 # *.pem
 # private.*
 
+# Private keys - NEVER commit these
+*.key
+*.pem
+private.*
+ca_certificates/private.pem
+certs/client.key
+mosquitto.key
