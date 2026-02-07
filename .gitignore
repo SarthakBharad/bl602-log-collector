@@ -101,6 +101,7 @@ htmlcov/
 # Private keys - NEVER commit these
 *.key
 *.pem
+*.der
 private.*
 ca_certificates/private.pem
 certs/client.key
