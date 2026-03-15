@@ -328,7 +328,7 @@ kill -9 <PID>
 
 ## Security Notes
 
-The default configuration uses `cert_reqs=ssl.CERT_NONE` for development convenience. For any production deployment you should:
+For any production deployment you should:
 
 - Generate your own CA and device certificates
 - Enable full certificate validation
