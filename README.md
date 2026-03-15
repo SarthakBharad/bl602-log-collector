@@ -310,34 +310,6 @@ bflb_iot_tool --firmware=firmware.bin
 
 ---
 
-## Troubleshooting
-
-**Cannot connect to MQTT broker**  
-Verify that Mosquitto is running, your TLS certificates are correctly placed, and that port 8883 is not blocked.
-
-**No logs appearing in the dashboard**  
-Check that `pc_logger.py` is running and connected. Verify the device is publishing to a topic matching `logs/#`. Check the browser console for any API errors.
-
-**Port 5000 already in use**  
-```bash
-lsof -i :5000
-kill -9 <PID>
-```
-
----
-
-## Security Notes
-
-The default configuration uses `cert_reqs=ssl.CERT_NONE` for development convenience. For any production deployment you should:
-
-- Generate your own CA and device certificates
-- Enable full certificate validation
-- Use strong, unique WiFi and MQTT credentials — avoid hardcoding them in source files
-- Run the API server behind a reverse proxy
-- Add authentication to the API if it is exposed on a network
-
----
-
 ## Future Improvements
 
 - Log export to CSV and JSON
