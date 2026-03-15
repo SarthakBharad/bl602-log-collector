@@ -356,10 +356,10 @@ MIT License
 ## Contributors
 
 - **Sarthak Bharad** — Project Lead
+- **Deepak Rajadurai** — Editor
 - **Gopal Awasthi** — Backend Development
 - **Vishant Bimbra** — Backend Development
 - **Amit Pal Singh** — Frontend & Dashboard
-- **Deepak Rajadurai** — Editor
 
 ---
 
