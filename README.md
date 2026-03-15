@@ -232,7 +232,6 @@ Multiple log lines may be batched into a single MQTT message, separated by newli
 | `/api/levels` | GET | Distinct log levels present in the database |
 | `/api/components` | GET | Distinct subsystems extracted from log messages |
 | `/api/clear` | POST | Delete all logs from the database |
-| `/api/health` | GET | Health check |
 
 The `/api/logs` endpoint accepts the following query parameters:
 
