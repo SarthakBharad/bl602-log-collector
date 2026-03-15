@@ -435,21 +435,27 @@
         
         async function fetchDevices() {
             try {
+                // Try to fetch from /api/devices endpoint first
                 const response = await fetch(`${API_BASE}/api/devices`);
                 const data = await response.json();
                 
                 let devices = [];
                 
+                // Handle different response formats
                 if (Array.isArray(data)) {
+                    // If it's an array, extract device_id from each object
                     devices = data.map(d => {
+                        // Handle both {device_id: "..."} and direct string formats
                         return typeof d === 'string' ? d : (d.device_id || d.id || d.name);
                     }).filter(Boolean);
                 } else if (data.devices && Array.isArray(data.devices)) {
+                    // If it's wrapped in a devices property
                     devices = data.devices.map(d => {
                         return typeof d === 'string' ? d : (d.device_id || d.id || d.name);
                     }).filter(Boolean);
                 }
                 
+                // If we got devices from the API, use them
                 if (devices.length > 0) {
                     devices.forEach(d => knownDevices.add(d));
                     updateDeviceDropdown();
@@ -459,14 +465,17 @@
                 console.error('Failed to fetch devices from API:', error);
             }
             
+            // Fallback: Extract unique devices from current logs
             await extractDevicesFromLogs();
         }
         
         async function extractDevicesFromLogs() {
             try {
+                // Fetch a larger set of logs to get all devices
                 const response = await fetch(`${API_BASE}/api/logs?limit=1000`);
                 const logs = await response.json();
                 
+                // Extract unique device IDs from logs
                 logs.forEach(log => {
                     if (log.device_id) {
                         knownDevices.add(log.device_id);
@@ -483,10 +492,13 @@
             const deviceFilter = document.getElementById('device-filter');
             const currentValue = deviceFilter.value;
             
+            // Clear existing options except "All Devices"
             deviceFilter.innerHTML = '<option value="">All Devices</option>';
             
+            // Sort devices alphabetically
             const sortedDevices = Array.from(knownDevices).sort();
             
+            // Add device options
             sortedDevices.forEach(deviceId => {
                 const option = document.createElement('option');
                 option.value = deviceId;
@@ -494,12 +506,14 @@
                 deviceFilter.appendChild(option);
             });
             
+            // Restore previous selection if it still exists
             if (currentValue && knownDevices.has(currentValue)) {
                 deviceFilter.value = currentValue;
             }
         }
         
         function selectDevice(deviceId) {
+            // Removed - no device selection functionality
         }
         
         async function refreshLogs() {
@@ -515,6 +529,7 @@
                 const response = await fetch(url);
                 const logs = await response.json();
                 
+                // Update known devices from current logs
                 logs.forEach(log => {
                     if (log.device_id && !knownDevices.has(log.device_id)) {
                         knownDevices.add(log.device_id);
@@ -592,6 +607,7 @@
             }, 3000);
         }
         
+        // Add event listeners for all filters
         document.getElementById('device-filter').addEventListener('change', refreshLogs);
         document.getElementById('level-filter').addEventListener('change', refreshLogs);
         document.getElementById('limit-filter').addEventListener('change', refreshLogs);

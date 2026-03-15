@@ -5,10 +5,12 @@ import threading
 from datetime import datetime, timedelta
 
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # Enable CORS for frontend access
 
 DB_FILE = "device_logs.db"
 db_lock = threading.Lock()
+
+# --- DATABASE HELPER FUNCTIONS ---
 
 def get_db_connection():
     """Create a database connection"""
@@ -27,19 +29,25 @@ def parse_component(message):
 def parse_timestamp(timestamp_str):
     """Safely parse timestamp string to datetime object (timezone-naive)"""
     try:
+        # Remove timezone info to keep it naive (easier for comparison)
         timestamp_str = timestamp_str.split('+')[0].split('Z')[0].strip()
         
+        # Try different formats
         for fmt in ['%Y-%m-%d %H:%M:%S.%f', '%Y-%m-%d %H:%M:%S', '%Y-%m-%dT%H:%M:%S.%f', '%Y-%m-%dT%H:%M:%S']:
             try:
                 return datetime.strptime(timestamp_str, fmt)
             except:
                 continue
         
+        # If format parsing fails, try fromisoformat
         return datetime.fromisoformat(timestamp_str)
     except:
         pass
     
+    # If all parsing fails, return current time (naive)
     return datetime.now()
+
+# --- API ENDPOINTS ---
 
 @app.route('/api/logs', methods=['GET'])
 def get_logs():
@@ -52,6 +60,7 @@ def get_logs():
     - component: filter by component
     """
     try:
+        # Get query parameters
         limit = request.args.get('limit', 100, type=int)
         device = request.args.get('device', '')
         level = request.args.get('level', '')
@@ -61,6 +70,7 @@ def get_logs():
             conn = get_db_connection()
             cursor = conn.cursor()
             
+            # Build query
             query = "SELECT * FROM logs WHERE 1=1"
             params = []
             
@@ -79,6 +89,7 @@ def get_logs():
             rows = cursor.fetchall()
             conn.close()
         
+        # Format logs for frontend
         logs = []
         for row in rows:
             log = {
@@ -105,12 +116,16 @@ def get_stats():
             conn = get_db_connection()
             cursor = conn.cursor()
             
+            # Total logs
             cursor.execute("SELECT COUNT(*) as count FROM logs")
             total_logs = cursor.fetchone()['count']
             
+            # Total devices
             cursor.execute("SELECT COUNT(DISTINCT device_id) as count FROM logs")
+            # cursor.execute("SELECT COUNT(DISTINCT device_id) as count FROM logs WHERE device_id = ?", ("bl602_001",))
             total_devices = cursor.fetchone()['count']
             
+            # Online devices (logs in last 5 minutes)
             five_min_ago = (datetime.now() - timedelta(minutes=5)).isoformat()
             cursor.execute("""
                 SELECT COUNT(DISTINCT device_id) as count 
@@ -139,6 +154,7 @@ def get_devices():
             conn = get_db_connection()
             cursor = conn.cursor()
             
+            # Get all devices with their last log timestamp
             cursor.execute("""
                 SELECT 
                     device_id,
@@ -151,11 +167,13 @@ def get_devices():
             rows = cursor.fetchall()
             conn.close()
         
+        # Format device data
         devices = []
         five_min_ago = datetime.now() - timedelta(minutes=5)
         
         for row in rows:
             try:
+                # Safely parse the timestamp
                 last_seen = parse_timestamp(row['last_seen'])
                 is_online = last_seen > five_min_ago
                 
@@ -168,6 +186,7 @@ def get_devices():
                 devices.append(device)
             except Exception as e:
                 print(f"Error parsing device {row['device_id']}: {e}")
+                # Still add the device even if timestamp parsing fails
                 device = {
                     'device_id': row['device_id'],
                     'log_count': row['log_count'],
@@ -230,6 +249,7 @@ def get_components():
             rows = cursor.fetchall()
             conn.close()
         
+        # Extract unique components
         components = set()
         for row in rows:
             component = parse_component(row['message'])
@@ -254,6 +274,8 @@ def index():
     """Serve the HTML frontend"""
     return app.send_static_file('index.html')
 
+# --- RUN SERVER ---
+
 if __name__ == '__main__':
     print("🚀 Starting REST API server...")
     print("📡 API available at: http://localhost:5000")
@@ -267,4 +289,5 @@ if __name__ == '__main__':
     print("  POST /api/clear      - Clear all logs")
     print("  GET  /api/health     - Health check")
     
+    # Run the Flask app
     app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
